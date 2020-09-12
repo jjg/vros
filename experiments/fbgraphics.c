@@ -11,6 +11,13 @@ uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b, struct fb_var_screeninfo *
     return (r<<vinfo->red.offset) | (g<<vinfo->green.offset) | (b<<vinfo->blue.offset);
 }
 
+void draw(int x, int y, int pixel)
+{
+
+    long location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
+    *((uint32_t*)(fbp + location)) = pixel_color(0xFF,0x00,0xFF, &vinfo);
+}
+
 void draw_line(int x1, int y1, int x2, int y2, uint32_t pixel)
 {
     int i,dx,dy,sdx,sdy,dxabs,dyabs,x,y,px,py;
