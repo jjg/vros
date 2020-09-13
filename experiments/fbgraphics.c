@@ -137,7 +137,9 @@ int main()
     printf("vinfo.xres = %d\n", vinfo.xres);
     printf("vinfo.yres = %d\n", vinfo.yres);
 
-    draw(10, 10, pixel_color(0xFF, 0x00, 0xFF));
+    //draw(10, 10, pixel_color(0xFF, 0xFF, 0xFF));
+    //draw_line(10,10,100,100,pixel_color(0xFF,0xFF,0xFF));a
+    draw_circle(100,100,50,pixel_color(0xFF,0xFF,0xFF));
 
 /*
     for (x=0;x<vinfo.xres;x++)
