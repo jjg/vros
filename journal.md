@@ -66,3 +66,15 @@ Things I need to write more about:
 * How the object list should get distributed, updated, etc.
 * Details about the VNS protocol, software, etc.
 * Authoring and "programming" objects
+
+
+## 09122020
+
+Began experimenting with writing graphics code against the framebuffer device in C.  Mostly a lesson in remembering C programming.
+
+
+## 09132020
+
+Making progress on the graphics programming.  I'm able to initialize the framebuffer and draw some primative shapes.
+
+
