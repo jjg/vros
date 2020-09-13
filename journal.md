@@ -77,4 +77,4 @@ Began experimenting with writing graphics code against the framebuffer device in
 
 Making progress on the graphics programming.  I'm able to initialize the framebuffer and draw some primative shapes.
 
-
+Trying to implement double buffering but creating segfaults instead.
