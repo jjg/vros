@@ -34,12 +34,17 @@ void fb_init()
 
     screensize = vinfo.yres_virtual * finfo.line_length;
 
-    //fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
 
+    //fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
+    //         addr, len, prot, flags, fildes, off
     fbp = mmap(0, screensize*2, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
     bbp = fbp + screensize;
 
     // debug
+    printf("finfo.smem_len: %d\n", finfo.smem_len);
+    printf("screensize = %d\n", screensize);
+    printf("fbp = %d\n", fbp);
+    perror("Framebuffer initialization result");
     printf("vinfo.xres = %d\n", vinfo.xres);
     printf("vinfo.yres = %d\n", vinfo.yres);
 }
@@ -174,7 +179,7 @@ int main()
 
     fb_init();
 
-    draw(10, 10, pixel_color(0xFF, 0xFF, 0xFF));
+    //draw(10, 10, pixel_color(0xFF, 0xFF, 0xFF));
     //draw_line(10,10,100,100,pixel_color(0xFF,0xFF,0xFF));
     //draw_circle(100,100,50,pixel_color(0,255,0));
     //swap_buffers();

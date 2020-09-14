@@ -91,3 +91,20 @@ Began experimenting with writing graphics code against the framebuffer device in
 Making progress on the graphics programming.  I'm able to initialize the framebuffer and draw some primative shapes.
 
 Trying to implement double buffering but creating segfaults instead.
+
+
+## 09142020
+
+Figured out that the mmap() call to use "panning" of the framebuffer for double-buffering was failing.  This manifested as a segfault because I wasn't checking the return value of mmap() before using it as a pointer.  Since -1 isn't a memory location my program is allowed access to, segfault.
+
+Now that I know where things are going wrong I can troubleshoot the proper thing.
+
+Looks like the heart of the problem is that the panning-based double-buffering I'm trying to use isn't possible because the video driver's maximum buffer is smaller than double the size of the display.  I could use a smaller resolution, but that's not terribly useful (and may not even be an option depending on how it's formatted on the HMD's display).  
+
+It's worth making a note to test this code on the Pinephone and see what values it's framebuffer driver returns; maybe we'll get lucky?
+
+If not, I'm going to have to find a different way to implement the double buffer.
+
+
+
+
