@@ -66,3 +66,17 @@ Things I need to write more about:
 * How the object list should get distributed, updated, etc.
 * Details about the VNS protocol, software, etc.
 * Authoring and "programming" objects
+
+## 09122020
+
+Major system components:
+
+* Kernel
+* Networking
+* Renderer
+* VNS
+* I/O device drivers
+
+Future hardware architecture
+
+Each I/O device is connected to a dedicated processor (via two-pair ethernet?) which can read and write directly to a shared block of memory.  This is very fast and maybeliminate the need for task scheduling by the kernal (since the tasks are manifested physically).
