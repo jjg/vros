@@ -80,3 +80,14 @@ Major system components:
 Future hardware architecture
 
 Each I/O device is connected to a dedicated processor (via two-pair ethernet?) which can read and write directly to a shared block of memory.  This is very fast and maybeliminate the need for task scheduling by the kernal (since the tasks are manifested physically).
+
+## 09122020
+
+Began experimenting with writing graphics code against the framebuffer device in C.  Mostly a lesson in remembering C programming.
+
+
+## 09132020
+
+Making progress on the graphics programming.  I'm able to initialize the framebuffer and draw some primative shapes.
+
+Trying to implement double buffering but creating segfaults instead.
