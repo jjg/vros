@@ -25,3 +25,5 @@ I could write a book here but I'm going to avoid that for now.  The most importa
 
 * https://www.gamasutra.com/blogs/MarkMennell/20140929/226628/Making_FastPaced_Multiplayer_Networked_Games_is_Hard.php
 * http://betteros.org/tut/graphics1.php
+* http://moi.vonos.net/linux/graphics-stack/
+* http://moi.vonos.net/linux/framebuffer-drivers/
