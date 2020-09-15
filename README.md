@@ -6,6 +6,8 @@ The Virtual Reality Operating System
 
 I could write a book here but I'm going to avoid that for now.  The most important thing about VROS is that the objective is to produce a a VR-first general-purpose computer.  This requires creating a native programming environment (perhaps a better term would be *authoring*) that puts the full power of the system into the hands of the user.
 
+For now the most current information about this project can be found in the [journal](journal.md).
+
 ## Iteration Zero
 
 ### Hardware
