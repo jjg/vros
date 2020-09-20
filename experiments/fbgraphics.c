@@ -54,24 +54,12 @@ uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b)
     return (r << vinfo.red.offset) | (g << vinfo.green.offset) | (b << vinfo.blue.offset);
 }
 
-void clear()
-{
-    int x,y;
-
-    // TODO: Use the draw() function instead of using the buffer directly
-    for (x=0;x<vinfo.xres;x++)
-        for (y=0;y<vinfo.yres;y++)
-        {
-            long location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
-            *((uint32_t*)(bbp + location)) = pixel_color(0x00,0x00,0x00);
-        }
-}
 
 // experimental double buffering
 void swap_buffers()
 {
     // Loop through back buffer and write it to front buffer
-    for(int i=0;i<(vinfo.yres_virtual * finfo.line_length)/4;i++)
+    for(int i=0;i<screensize/4;i++)
     {
         ((uint32_t*)(fbp))[i] = bbp[i];
     }
@@ -81,6 +69,17 @@ void draw(int x, int y, int pixel)
 {
     long location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
     *((uint32_t*)(bbp + location)) = pixel;
+}
+
+void clear()
+{
+    for (int x=0;x<vinfo.xres;x++)
+    {
+        for (int y=0;y<vinfo.yres;y++)
+        {
+            draw(x,y,pixel_color(0x00,0x00,0x00));
+        }
+    }
 }
 
 void draw_line(int x1, int y1, int x2, int y2, uint32_t pixel)
