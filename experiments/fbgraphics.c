@@ -43,7 +43,7 @@ void fb_init()
     printf("fbp = %d\n", fbp);
     perror("Framebuffer initialization result");
 
-    bbp = (uint8_t*)mmap(0, screensize, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, (off_t)0);
+    bbp = mmap(0, screensize, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, (off_t)0);
 
     printf("bbp = %d\n", bbp);
     perror("Back buffer initialization result");
@@ -55,16 +55,7 @@ uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b)
 }
 
 
-// experimental double buffering
-void swap_buffers()
-{
-    // Loop through back buffer and write it to front buffer
-    for(int i=0;i<screensize/4;i++)
-    {
-        ((uint32_t*)(fbp))[i] = bbp[i];
-    }
-}
-
+// Drawing primatives
 void draw(int x, int y, int pixel)
 {
     long location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
@@ -166,11 +157,36 @@ void draw_circle(double cx, double cy, int radius, uint32_t pixel)
     }
 }
 
+// experimental double buffering
+void swap_buffers()
+{
+    // Loop through back buffer and write it to front buffer
+    // (screensize is divided by 4 because the buffer pointer is 8 bits
+    // and the display is 32 bits...
+    for(int i=0;i<screensize/4;i++)
+    {
+        ((uint32_t*)(fbp))[i] = bbp[i];
+    }
+}
+
 int main()
 {
     printf("init\n");
     fb_init();
 
+    int x = 100;
+    int y = 100;
+
+    for(int i=0;i<100;i++)
+    {
+        draw_circle(x,y,50,pixel_color(0,255,0));
+        swap_buffers();
+        clear();
+        swap_buffers();
+        x++;
+        y++;
+    }
+    /*
     printf("circle\n");
     draw_circle(100,100,50,pixel_color(0,255,0));
 
@@ -179,21 +195,24 @@ int main()
 
     // some fast movement
     clear();
-    swap_buffers();
+    //swap_buffers();
     draw_circle(100,110,50,pixel_color(0,255,0));
-    swap_buffers();
+    //sleep(1);
+    //swap_buffers();
     clear();
-    swap_buffers();
+    //swap_buffers();
     draw_circle(100,120,50,pixel_color(0,255,0));
-    swap_buffers();
+    //sleep(1);
+    //swap_buffers();
     clear();
-    swap_buffers();
+    //swap_buffers();
     draw_circle(100,130,50,pixel_color(0,255,0));
-    swap_buffers();
+    //sleep(1);
+    //swap_buffers();
     clear();
-    swap_buffers();
+    //swap_buffers();
     draw_circle(100,140,50,pixel_color(0,255,0));
-    swap_buffers();
-
+    //swap_buffers();
+    */
     return 0;
 }
