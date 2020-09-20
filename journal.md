@@ -146,3 +146,7 @@ Runnning it from X does nothing, but switching to one of the virtual consoles (`
 Let's do something to put double-buffering to bed for now.
 
 An initial RAM-based double-buffering implementation is in place.  It appears to work, but something weird is happening that results in the image looking "scaled-up".  I'm sure I'm just doing something dumb, but since that's not the focus at the moment I'm going to let it be for now.
+
+Attempted to do some animation by drawing a circle in several places and clearing the screen in-between.  It is not fast.
+
+

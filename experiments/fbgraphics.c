@@ -178,5 +178,23 @@ int main()
     printf("swap\n");
     swap_buffers();
 
+    // some fast movement
+    clear();
+    swap_buffers();
+    draw_circle(100,110,50,pixel_color(0,255,0));
+    swap_buffers();
+    clear();
+    swap_buffers();
+    draw_circle(100,120,50,pixel_color(0,255,0));
+    swap_buffers();
+    clear();
+    swap_buffers();
+    draw_circle(100,130,50,pixel_color(0,255,0));
+    swap_buffers();
+    clear();
+    swap_buffers();
+    draw_circle(100,140,50,pixel_color(0,255,0));
+    swap_buffers();
+
     return 0;
 }
