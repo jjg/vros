@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 // NOTE: Must be run as superuser (su)!
 
@@ -35,9 +36,9 @@ void fb_init()
     screensize = vinfo.yres_virtual * finfo.line_length;
 
 
-    //fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
+    fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
     //         addr, len, prot, flags, fildes, off
-    fbp = mmap(0, screensize*2, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
+    //fbp = mmap(0, screensize*2, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
     bbp = fbp + screensize;
 
     // debug
@@ -62,7 +63,7 @@ void clear()
         for (y=0;y<vinfo.yres;y++)
         {
             long location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
-            *((uint32_t*)(bbp + location)) = pixel_color(0xFF,0x00,0xFF);
+            *((uint32_t*)(fbp + location)) = pixel_color(0x00,0x00,0x00);
         }
 }
 
@@ -178,11 +179,14 @@ int main()
 {
 
     fb_init();
+    clear();
 
     //draw(10, 10, pixel_color(0xFF, 0xFF, 0xFF));
     //draw_line(10,10,100,100,pixel_color(0xFF,0xFF,0xFF));
-    //draw_circle(100,100,50,pixel_color(0,255,0));
+    draw_circle(100,100,50,pixel_color(0,255,0));
     //swap_buffers();
+
+    sleep(1);
 
     return 0;
 }
