@@ -107,4 +107,42 @@ If not, I'm going to have to find a different way to implement the double buffer
 
 
 
+## 09202020
 
+Ran the code on the pinephone and got these results:
+
+finfo.smem_len: 4147200
+screensize:     4147200
+vinfo.xres:     720
+vinfo.yres:     1140
+
+Looks like the reported video memory is the same as a single screen worth of pixels, so I don't think we're going to be able to use the panning trick here.  I'm going to see about running a more stripped-down distro on the phone and see if that changes anything, but I expect we're going to have to find another way to implement the double-buffer.
+
+OK, making some progress with the pinephone!
+
+Running the test code with the GUI up does nothing, however I finally found a way to get out of the GUI from the console:
+
+    sudo init 3
+
+This makes the screen go black and drops my ssh connection, but I'm able to reconnect and resume my tmux session.  If I run the framebuffer code now, it works!
+
+This is good news, because it means I probably won't need to waste time looking for another build/distro just to continue these experiments on the pinephone.
+
+There's a lot of things we could do next...
+
+* Work on a double-buffering solution
+* Work on some 3D primatives
+* Get input from the accelerometer/gyro
+* ???
+
+Right now I want to focus on the graphics/VR I/O aspects as opposed to the Netspace/VNS architecture stuff since I could complete a more interesting demo without the Netspace working.  Plus I could test using the pinephone with a cheap HMD to see how that's going to work out.
+
+Did a little research on getting accel/gyro input but it's not clear to me if this is avaliable via a standard Unix interface (/dev/*something*) or if I have to talk to the chip via whatever bus it's attached to (i2c, etc.).  I [posted a question](https://forum.pine64.org/showthread.php?tid=11554) to the Pine64 forum to see if anyone has any advice here.  While I wait to hear anything back I might switch-gears and work on some more graphics stuff.
+
+Let's try running this on the Pinebook Pro and see what happens...
+
+Runnning it from X does nothing, but switching to one of the virtual consoles (`ctrl-alt-F3`, then `ctrl-alt-F2` to get back) and then running the code draws the expected circle, so I think we can debug on the laptop where it's easier than the phone (for now).
+
+Let's do something to put double-buffering to bed for now.
+
+An initial RAM-based double-buffering implementation is in place.  It appears to work, but something weird is happening that results in the image looking "scaled-up".  I'm sure I'm just doing something dumb, but since that's not the focus at the moment I'm going to let it be for now.

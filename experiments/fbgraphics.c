@@ -28,26 +28,25 @@ void fb_init()
     vinfo.grayscale=0;
     vinfo.bits_per_pixel=32;
     ioctl(fb_fd, FBIOPUT_VSCREENINFO, &vinfo);
-
     ioctl(fb_fd, FBIOGET_VSCREENINFO, &vinfo);
-
     ioctl(fb_fd, FBIOGET_FSCREENINFO, &finfo);
 
     screensize = vinfo.yres_virtual * finfo.line_length;
 
-
-    fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
-    //         addr, len, prot, flags, fildes, off
-    //fbp = mmap(0, screensize*2, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
-    bbp = fbp + screensize;
-
-    // debug
     printf("finfo.smem_len: %d\n", finfo.smem_len);
     printf("screensize = %d\n", screensize);
-    printf("fbp = %d\n", fbp);
-    perror("Framebuffer initialization result");
     printf("vinfo.xres = %d\n", vinfo.xres);
     printf("vinfo.yres = %d\n", vinfo.yres);
+
+    fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
+    
+    printf("fbp = %d\n", fbp);
+    perror("Framebuffer initialization result");
+
+    bbp = (uint8_t*)mmap(0, screensize, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, (off_t)0);
+
+    printf("bbp = %d\n", bbp);
+    perror("Back buffer initialization result");
 }
 
 uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b)
@@ -59,36 +58,29 @@ void clear()
 {
     int x,y;
 
+    // TODO: Use the draw() function instead of using the buffer directly
     for (x=0;x<vinfo.xres;x++)
         for (y=0;y<vinfo.yres;y++)
         {
             long location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
-            *((uint32_t*)(fbp + location)) = pixel_color(0x00,0x00,0x00);
+            *((uint32_t*)(bbp + location)) = pixel_color(0x00,0x00,0x00);
         }
 }
 
 // experimental double buffering
 void swap_buffers()
 {
-    if (vinfo.yoffset==0)
-            vinfo.yoffset = screensize;
-    else
-            vinfo.yoffset=0;
-
-    //"Pan" to the back buffer
-    ioctl(fb_fd, FBIOPAN_DISPLAY, &vinfo);
-
-    //Update the pointer to the back buffer so we don't draw on the front buffer
-    long tmp;
-    tmp=fbp;
-    fbp=bbp;
-    bbp=tmp;
+    // Loop through back buffer and write it to front buffer
+    for(int i=0;i<(vinfo.yres_virtual * finfo.line_length)/4;i++)
+    {
+        ((uint32_t*)(fbp))[i] = bbp[i];
+    }
 }
 
 void draw(int x, int y, int pixel)
 {
     long location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
-    *((uint32_t*)(fbp + location)) = pixel;
+    *((uint32_t*)(bbp + location)) = pixel;
 }
 
 void draw_line(int x1, int y1, int x2, int y2, uint32_t pixel)
@@ -177,16 +169,14 @@ void draw_circle(double cx, double cy, int radius, uint32_t pixel)
 
 int main()
 {
-
+    printf("init\n");
     fb_init();
-    clear();
 
-    //draw(10, 10, pixel_color(0xFF, 0xFF, 0xFF));
-    //draw_line(10,10,100,100,pixel_color(0xFF,0xFF,0xFF));
+    printf("circle\n");
     draw_circle(100,100,50,pixel_color(0,255,0));
-    //swap_buffers();
 
-    sleep(1);
+    printf("swap\n");
+    swap_buffers();
 
     return 0;
 }
