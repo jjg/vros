@@ -150,3 +150,16 @@ An initial RAM-based double-buffering implementation is in place.  It appears to
 Attempted to do some animation by drawing a circle in several places and clearing the screen in-between.  It is not fast.
 
 
+## 09262020
+
+After seeing what could be done with RAM-based double-buffering it's becoming clear that I'm going to have to figure something else out.  I really don't want to, I'd much rather talk directly to the video memory to do the job but I don't see a way to get access to enough vram to do fast double-buffering using the framebuffer, so I think I'm going to have to go the [drm](https://en.wikipedia.org/wiki/Direct_Rendering_Manager).  In the short-term this has the advantage of getting more out of the hardware under Linux, but in the long run it means I'll have some non-portable code to throw away when I start implementing the system on custom hardware.
+
+Anyway, "The show must go on!"
+
+After spending about 30 minutes looking at DRM I started wondering if I should just go all-in with some Linux-specific 3d library.  I found a few, this was the most interesting:
+
+https://www.linuxjournal.com/article/10294
+
+I dunno, I don't really like the idea of deligating so much but, I'll have to play around and see if it gets me closer to the primary objectives faster or not.
+
+
