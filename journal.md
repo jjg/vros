@@ -163,3 +163,15 @@ https://www.linuxjournal.com/article/10294
 I dunno, I don't really like the idea of deligating so much but, I'll have to play around and see if it gets me closer to the primary objectives faster or not.
 
 
+## 10182020
+
+Spent some time last night and this morning thinking about what makes VROS unique in a future where the term "VR" is mainstream and there are many high-budget efforts going into developing VR technology.  The short answer is "a lot", but the most important one to me is that I'm building something that anyone can use to build things, using the thing I'm building itself.
+
+I've also been thinking about turning my focus to VNS as opposed to the "front-end" work on the I/O.  I've been sinking a lot of time into fighting with Linux to put lines on the screen and in the big picture that's probably not where my specific skills and experience can add the most value.  Instead, I'm going to try and focus on VNS, and the protocols that connect VNS to the cyberdecks.
+
+This accomplishes two things:
+
+1. I can make some real progress because an initial VNS can be written using tools I'm very comfortable and familiar with
+2. I can defer the cyberdeck work until I can pursue my original intention, custom hardware and a complete operating system
+
+In the meantime there will be a need to develop some types of immersive interfaces to test and experiment with the VNS.  I can do this using more primative tools myself, or I may be able to get other programmers who are more familiar with the graphics stuff on Linux (or whatever) to join in.  In the long run I expect there to be multiple "clients" for VNS, so this isn't wasted effort, and it also doesn't pollute the work I want to do on the reference design cyberdeck.
