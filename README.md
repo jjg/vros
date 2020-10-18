@@ -8,20 +8,6 @@ I could write a book here but I'm going to avoid that for now.  The most importa
 
 For now the most current information about this project can be found in the [journal](journal.md).
 
-## Iteration Zero
-
-### Hardware
-
-* [Pinephone]()-based [head-mounted display]()
-* "[cyberdeck]()"-style, full-sized mechanical keyboard
-* "[Dataglove]()"-style input device
-
-### Software
-
-* [Linux]() kernel
-* Immersive Environment Init
-* Netspace Navigator
-
 
 ## References
 
@@ -29,3 +15,6 @@ For now the most current information about this project can be found in the [jou
 * http://betteros.org/tut/graphics1.php
 * http://moi.vonos.net/linux/graphics-stack/
 * http://moi.vonos.net/linux/framebuffer-drivers/
+* [Pinephone](https://www.pine64.org/pinephone/)-based [head-mounted display](https://en.wikipedia.org/wiki/Head-mounted_display)
+* "[cyberdeck](https://en.wikipedia.org/wiki/Sprawl_trilogy)"-style, full-sized mechanical keyboard
+* "[Dataglove](https://en.wikipedia.org/wiki/Wired_glove)"-style input device
