@@ -106,5 +106,15 @@ It's worth making a note to test this code on the Pinephone and see what values 
 If not, I'm going to have to find a different way to implement the double buffer.
 
 
+## 09152020
+
+Wrote a [blog post](https://jasongullickson.com/blog/a-hardware-operating-system.html) about some of the wilder ideas that have sprung-forth from this effort.  There's a lot of cool things to explore but I'm trying really hard to keep my eye on the ball.  Hopefully writing this stuff down and putting it out there will be enough to keep them from distracting me.
+
+I had a thought last night that it might make sense to make VNS hierarchical to some degree by making the local cyberdeck threads (display output, dataglove input, etc.) always run against the local, internal VNS and then when a user (need a better term for that) moves to another Netspace, it is the two VNS servers (local and remote) that hold the conversation.  This has pros and cons: on the pro side, the local processes can be oblivious to which VNS is authorative and both the VNS and the service threads can be optimized to talk only to each-other.  On the con side, there is a potential increase in latency as all world data is relayed through the local VNS.  Reducing latency at all costs seems like an important mantra for a project like this, but it's hard to quickly discard the potential advantages of using the local VNS as the sole abstraction between the cyberdeck and the outside world.  I don't need to make the decision now, and when the time comes it might be a simple matter of building both and conducting experiments.
+
+On the graphics side the next step is to simply run the framebuffer experimental code on the Pinephone and see what we get for free.  If the standard kernel and driver won't give us enough video memory to double-buffer, we have a few options.  We could simply do the double-buffering in RAM and see if this is good enough for now.  Another option is to use the DRM methods, but I'm not very excited about adding that much complexity (and frankly, Linux-specific complexity) to the project at this stage.
+
+Honestly if the "panning" approach doesn't "just work" on the Pinephone, I think I'm going to go with the buffers in RAM and just see how far that gets us.  If that isn't far, I might look into finding another framebuffer driver (or modifying an existing one) to get access to enough video RAM to do the buffering there.  In the long run we'll be using our own video hardware and it will be best if we can avoid relying on anything Linux-specific.
+
 
 
