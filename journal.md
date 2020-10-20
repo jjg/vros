@@ -117,4 +117,71 @@ On the graphics side the next step is to simply run the framebuffer experimental
 Honestly if the "panning" approach doesn't "just work" on the Pinephone, I think I'm going to go with the buffers in RAM and just see how far that gets us.  If that isn't far, I might look into finding another framebuffer driver (or modifying an existing one) to get access to enough video RAM to do the buffering there.  In the long run we'll be using our own video hardware and it will be best if we can avoid relying on anything Linux-specific.
 
 
+## 09202020
 
+Ran the code on the pinephone and got these results:
+
+finfo.smem_len: 4147200
+screensize:     4147200
+vinfo.xres:     720
+vinfo.yres:     1140
+
+Looks like the reported video memory is the same as a single screen worth of pixels, so I don't think we're going to be able to use the panning trick here.  I'm going to see about running a more stripped-down distro on the phone and see if that changes anything, but I expect we're going to have to find another way to implement the double-buffer.
+
+OK, making some progress with the pinephone!
+
+Running the test code with the GUI up does nothing, however I finally found a way to get out of the GUI from the console:
+
+    sudo init 3
+
+This makes the screen go black and drops my ssh connection, but I'm able to reconnect and resume my tmux session.  If I run the framebuffer code now, it works!
+
+This is good news, because it means I probably won't need to waste time looking for another build/distro just to continue these experiments on the pinephone.
+
+There's a lot of things we could do next...
+
+* Work on a double-buffering solution
+* Work on some 3D primatives
+* Get input from the accelerometer/gyro
+* ???
+
+Right now I want to focus on the graphics/VR I/O aspects as opposed to the Netspace/VNS architecture stuff since I could complete a more interesting demo without the Netspace working.  Plus I could test using the pinephone with a cheap HMD to see how that's going to work out.
+
+Did a little research on getting accel/gyro input but it's not clear to me if this is avaliable via a standard Unix interface (/dev/*something*) or if I have to talk to the chip via whatever bus it's attached to (i2c, etc.).  I [posted a question](https://forum.pine64.org/showthread.php?tid=11554) to the Pine64 forum to see if anyone has any advice here.  While I wait to hear anything back I might switch-gears and work on some more graphics stuff.
+
+Let's try running this on the Pinebook Pro and see what happens...
+
+Runnning it from X does nothing, but switching to one of the virtual consoles (`ctrl-alt-F3`, then `ctrl-alt-F2` to get back) and then running the code draws the expected circle, so I think we can debug on the laptop where it's easier than the phone (for now).
+
+Let's do something to put double-buffering to bed for now.
+
+An initial RAM-based double-buffering implementation is in place.  It appears to work, but something weird is happening that results in the image looking "scaled-up".  I'm sure I'm just doing something dumb, but since that's not the focus at the moment I'm going to let it be for now.
+
+Attempted to do some animation by drawing a circle in several places and clearing the screen in-between.  It is not fast.
+
+
+## 09262020
+
+After seeing what could be done with RAM-based double-buffering it's becoming clear that I'm going to have to figure something else out.  I really don't want to, I'd much rather talk directly to the video memory to do the job but I don't see a way to get access to enough vram to do fast double-buffering using the framebuffer, so I think I'm going to have to go the [drm](https://en.wikipedia.org/wiki/Direct_Rendering_Manager).  In the short-term this has the advantage of getting more out of the hardware under Linux, but in the long run it means I'll have some non-portable code to throw away when I start implementing the system on custom hardware.
+
+Anyway, "The show must go on!"
+
+After spending about 30 minutes looking at DRM I started wondering if I should just go all-in with some Linux-specific 3d library.  I found a few, this was the most interesting:
+
+https://www.linuxjournal.com/article/10294
+
+I dunno, I don't really like the idea of deligating so much but, I'll have to play around and see if it gets me closer to the primary objectives faster or not.
+
+
+## 10182020
+
+Spent some time last night and this morning thinking about what makes VROS unique in a future where the term "VR" is mainstream and there are many high-budget efforts going into developing VR technology.  The short answer is "a lot", but the most important one to me is that I'm building something that anyone can use to build things, using the thing I'm building itself.
+
+I've also been thinking about turning my focus to VNS as opposed to the "front-end" work on the I/O.  I've been sinking a lot of time into fighting with Linux to put lines on the screen and in the big picture that's probably not where my specific skills and experience can add the most value.  Instead, I'm going to try and focus on VNS, and the protocols that connect VNS to the cyberdecks.
+
+This accomplishes two things:
+
+1. I can make some real progress because an initial VNS can be written using tools I'm very comfortable and familiar with
+2. I can defer the cyberdeck work until I can pursue my original intention, custom hardware and a complete operating system
+
+In the meantime there will be a need to develop some types of immersive interfaces to test and experiment with the VNS.  I can do this using more primative tools myself, or I may be able to get other programmers who are more familiar with the graphics stuff on Linux (or whatever) to join in.  In the long run I expect there to be multiple "clients" for VNS, so this isn't wasted effort, and it also doesn't pollute the work I want to do on the reference design cyberdeck.
