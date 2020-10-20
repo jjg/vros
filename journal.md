@@ -185,3 +185,30 @@ This accomplishes two things:
 2. I can defer the cyberdeck work until I can pursue my original intention, custom hardware and a complete operating system
 
 In the meantime there will be a need to develop some types of immersive interfaces to test and experiment with the VNS.  I can do this using more primative tools myself, or I may be able to get other programmers who are more familiar with the graphics stuff on Linux (or whatever) to join in.  In the long run I expect there to be multiple "clients" for VNS, so this isn't wasted effort, and it also doesn't pollute the work I want to do on the reference design cyberdeck.
+
+
+## 10202020
+
+Last night and this morning I had a new idea with regard to how things are created in this system.  First I have a name for the module/tool that is used to create new things: "magic crayon".  Second, I'm exploring the idea of giving objects self-contained provanonce (sp?) or heredity.
+
+Imagine if each object contained a list of everything that happened to it and everyone who did those things since its inception.  This would allow for a number of interesting effects:
+
+* Any object's form could be rolled backwards and forwards like an unlimited undo/redo
+* All of the time spent creating the object could be accounted for and attributed to those who created it
+* The lineage of derivatives could be traced
+
+Aside from the convinience of undo/redo the ability to identify who contributed to an object makes it easy to credit those who contributed.  It also makes it easy for the creators to establish a reputation and provides an intrinisic means of promoting their skills.  Since the history is traced this attribution includes those who copied the object and modified it, or combined it with other objects to create something new.  As it is the *time* spent on the object which establishes the contributors contribution, all contributers are valued equally.
+
+My first thought is a journal with a structure like this:
+
+`@creator@object@action@local_coordinates@local_netspace@`
+
+Something interesting about this is that it logs the object through both space and time (perhaps we could simplify this as x,y,z,t?)
+
+Without getting too much in the weeds about how we represent a person or a place, for now we'll just use some integer ID's (more likely these will be things like public keys, hashes, etc.).  What might an actual log look like?
+
+```
+@jason@none@cube([10,10,10])@[0,0,0,1603207849.367761]@jason_cyberdeck
+@jason@cube1@translate([0,0,10]),[0,0,0,1603209249.1595469]@jason_cyberdeck
+
+```
